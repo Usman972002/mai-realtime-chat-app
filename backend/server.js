@@ -8,9 +8,11 @@ const PORT = process.env.PORT || 3001
 const {jwtMiddleWare} = require('./jwt');
 const {app,server} = require('./socket/socket.js');
 const path = require('path');
+const cors = require('cors');
 
 dotenv.config();
 
+app.use(cors());
 app.use(express.json());
 app.use(cookieParser());
 
