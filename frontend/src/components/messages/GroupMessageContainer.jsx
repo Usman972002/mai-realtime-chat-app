@@ -9,15 +9,9 @@ const GroupMessageContainer = () => {
   const { selectedGroup, setSelectedGroup } = useConversation();
   const [group, setGroup] = useState(selectedGroup); 
 
-  // useEffect(() => {
-  //   return () => setSelectedGroup(null);
-  // }, [setSelectedGroup]);
-
   useEffect(() => {
     setGroup(selectedGroup); // Update when selectedGroup changes
   }, [selectedGroup]);
-
-  console.log(selectedGroup)
 
   return (
     <div className="w-full flex flex-col h-full bg-gray-800 text-white rounded-lg p-4 shadow-lg">

@@ -14,8 +14,6 @@ const profilePic = fromMe
 ? authUser.profilePic 
 : sender?.profilePic || "https://via.placeholder.com/150";
 const bubbleBgColor = fromMe ? "bg-blue-500" : "bg-gray-700";
-  // const profilePic = fromMe ? authUser.profilePic : "https://via.placeholder.com/150";
-  // const bubbleBgColor = fromMe ? "bg-blue-500" : "bg-gray-700";
 
   return (
     <div className={`chat ${chatClassName}`}>

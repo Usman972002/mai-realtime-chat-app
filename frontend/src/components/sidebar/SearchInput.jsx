@@ -19,7 +19,6 @@ const SearchInput = () => {
     const conv = conversation.find((c) =>
       c.fullname.toLowerCase().includes(search.toLocaleLowerCase())
     );
-    console.log(conv);
     if (conv) {
       setSelectedConversation(conv);
       setSearch("");
@@ -28,20 +27,6 @@ const SearchInput = () => {
     }
   };
 
-  // return (
-  //   <form onClick={handleSubmit} className="flex items-center gap-2">
-  //     <input
-  //       type="text"
-  //       placeholder="Search…"
-  //       className="input input-bordered rounded-full w-[300px]"
-	// 	value={search}
-	// 	onChange={(e)=>setSearch(e.target.value)}
-  //     />
-  //     <button type="submit" className="btn btn-circle bg-sky-500 text-white">
-  //       <IoSearchSharp className="w-6 h-6 outline-none" />
-  //     </button>
-  //   </form>
-  // );
   return (
     <form onSubmit={handleSubmit} className="flex items-center gap-3 p-3">
       <input

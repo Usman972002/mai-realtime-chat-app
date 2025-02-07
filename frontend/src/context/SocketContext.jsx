@@ -31,7 +31,6 @@ export const SocketContextProvider = ({ children }) => {
 			});
 
 			socket.on("newGroupMessage", (message) => {
-				console.log("New Group Message Received:", message);
 				setGroupMessages((prevMessages) => [...prevMessages, message]);
 			});
 
