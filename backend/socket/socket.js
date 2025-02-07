@@ -15,6 +15,7 @@ const getReceiverSocketId = (receiverId) => {
 };
 
 const userSocketMap = {}; // {userId: socketId}
+const groupMembers = {};  // {groupId: [socketIds]}
 
 io.on("connection", (socket) => {
 	console.log("a user connected", socket.id);
@@ -29,7 +30,34 @@ io.on("connection", (socket) => {
 	socket.on("disconnect", () => {
 		console.log("user disconnected", socket.id);
 		delete userSocketMap[userId];
+
+// Remove user from all groups
+for (const groupId in groupMembers) {
+	groupMembers[groupId].delete(socket.id);
+	if (groupMembers[groupId].size === 0) {
+		delete groupMembers[groupId];
+	}
+}
+
+
 		io.emit("getOnlineUsers", Object.keys(userSocketMap));
+	});
+
+	 	// Handle joining group rooms
+	socket.on("joinGroup", (groupId) => {
+		console.log(`User ${socket.id} joined group ${groupId}`);
+		socket.join(groupId);
+
+		if (!groupMembers[groupId]) {
+			groupMembers[groupId] = new Set();
+		}
+		groupMembers[groupId].add(socket.id);
+	});
+
+	// Handle sending group messages
+	socket.on("sendGroupMessage", ({ groupId, message }) => {
+		console.log(`Sending message to group ${groupId}:`, message);
+		io.to(groupId).emit("newGroupMessage", message);  // Send to group members
 	});
 });
 

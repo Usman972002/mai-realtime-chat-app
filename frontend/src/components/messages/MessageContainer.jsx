@@ -2,15 +2,22 @@ import MessageInput from "./MessageInput";
 import Messages from "./Messages";
 import { TiMessages } from "react-icons/ti";
 import useConversation from "../../zustand/useConversation";
-import { useEffect } from "react";
+import { useEffect,useState } from "react";
 import { useAuthContext } from "../../context/AuthContext";
 
 const MessageContainer = () => {
   const { selectedConversation, setSelectedConversation } = useConversation();
 
+  const [conversation, setConversation] = useState(selectedConversation);
+
   useEffect(() => {
-    return () => setSelectedConversation(null);
-  }, [setSelectedConversation]);
+    setConversation(selectedConversation); // Ensure re-render when selection changes
+  }, [selectedConversation]);
+
+
+  // useEffect(() => {
+  //   return () => setSelectedConversation(null);
+  // }, [setSelectedConversation]);
 
   // return (
   //   <div className="md:min-w-[450px] w-full flex flex-col">
@@ -35,13 +42,13 @@ const MessageContainer = () => {
 
   return (
     <div className="w-full flex flex-col h-full bg-gray-800 text-white rounded-lg p-4 shadow-lg">
-      {!selectedConversation ? (
+      {!conversation ? (
         <NoChatSelected />
       ) : (
         <>
           <div className="bg-gray-700 p-3 rounded-md mb-2 flex items-center">
             <span className="text-gray-300">To:</span>
-            <span className="ml-2 font-semibold">{selectedConversation.fullname}</span>
+            <span className="ml-2 font-semibold">{selectedConversation?.fullname}</span>
           </div>
           <Messages />
           <MessageInput />

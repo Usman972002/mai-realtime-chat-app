@@ -1,6 +1,7 @@
 import { createContext, useState, useEffect, useContext } from "react";
 import { useAuthContext } from "./AuthContext";
 import io from "socket.io-client";
+import useConversation from "../zustand/useConversation";
 
 const SocketContext = createContext();
 
@@ -12,6 +13,7 @@ export const SocketContextProvider = ({ children }) => {
 	const [socket, setSocket] = useState(null);
 	const [onlineUsers, setOnlineUsers] = useState([]);
 	const { authUser } = useAuthContext();
+	const { selectedGroup, setGroupMessages } = useConversation(); 
 
 	useEffect(() => {
 		if (authUser) {
@@ -28,6 +30,11 @@ export const SocketContextProvider = ({ children }) => {
 				setOnlineUsers(users);
 			});
 
+			socket.on("newGroupMessage", (message) => {
+				console.log("New Group Message Received:", message);
+				setGroupMessages((prevMessages) => [...prevMessages, message]);
+			});
+
 			return () => socket.close();
 		} else {
 			if (socket) {
@@ -36,6 +43,13 @@ export const SocketContextProvider = ({ children }) => {
 			}
 		}
 	}, [authUser]);
+
+	useEffect(() => {
+		if (socket && selectedGroup?._id) {
+			console.log("Joining group:", selectedGroup._id);
+			socket.emit("joinGroup", selectedGroup._id);
+		}
+	}, [selectedGroup, socket]);
 
 	return <SocketContext.Provider value={{ socket, onlineUsers }}>{children}</SocketContext.Provider>;
 };

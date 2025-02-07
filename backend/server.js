@@ -9,6 +9,7 @@ const {jwtMiddleWare} = require('./jwt');
 const {app,server} = require('./socket/socket.js');
 const path = require('path');
 const cors = require('cors');
+const groupRouter = require('./routes/groupRoutes');
 
 dotenv.config();
 
@@ -18,6 +19,7 @@ app.use(cookieParser());
 
 app.use('/api/user',userRouter);
 app.use('/api/messages',jwtMiddleWare,messageRouter);
+app.use('/api/groups', jwtMiddleWare, groupRouter);
 
 app.use(express.static(path.join(__dirname,"../frontend/dist")))
 
